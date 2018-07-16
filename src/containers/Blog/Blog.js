@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
-import Oux from '../../hoc/Oux'; 
-import axios from 'axios';
-
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
+import Oux from '../../hoc/Oux';
+import Posts from './Posts/Posts';
+import { Route } from 'react-router-dom';
 import './Blog.css';
 
 class Blog extends Component {
@@ -13,53 +10,22 @@ class Blog extends Component {
         posts: [], 
         postSelectedId: null,
         error: false
-    }
+    } 
 
-    componentDidMount(){
-        // Make a request for a user with a given ID
-        axios.get('/posts')
-        .then(response=>{
-            const posts = response.data.slice(0, 4);
-            const updatedPost = posts.map(post=>{
-                return {...post, author: 'Max'}
-            });
-            this.setState({posts: updatedPost});
-            // handle success
-            //console.log(updatedPost);
-        })
-        .catch(error=> {
-            // handle error
-            // console.log(error);
-            this.setState({error: true});
-        });
-    }
-
-    postSelectedHandaler = (id) =>{
-        this.setState({postSelectedId: id});
-    }
-
-    render () {
-        let posts = <p style={{textAlign: 'center'}}>Somthing was wrong!</p>;
-        if(!this.state.error){
-            posts = this.state.posts.map(post=>{ 
-                return <Post key={post.id} 
-                            title={post.title} 
-                            author={[post.author]} 
-                            clicked={()=>this.postSelectedHandaler(post.id)}/>
-            });
-        }
+    render () { 
 
         return (
             <Oux>
-                <section className="Posts">
-                    {posts}
-                </section>
-                <section>
-                    <FullPost postId={this.state.postSelectedId}/>
-                </section>
-                <section>
-                    <NewPost />
-                </section>
+                <header>
+                    <nav>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/new-post">New Post</a></li>
+                        </ul>
+                    </nav>
+                </header> 
+                <Route path='/' exact render={()=>(<h1>Home</h1>)} />
+                <Route path='/' exact component={Posts} /> 
             </Oux>
         );
     }
