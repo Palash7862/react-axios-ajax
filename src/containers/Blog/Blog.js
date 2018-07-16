@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { Route, Switch, Link } from 'react-router-dom';
 import Oux from '../../hoc/Oux';
 import Posts from './Posts/Posts';
-import { Route } from 'react-router-dom';
+import NewPosts from './NewPost/NewPost';
+import FullPost from './FullPost/FullPost';
+
 import './Blog.css';
 
 class Blog extends Component {
@@ -10,7 +13,7 @@ class Blog extends Component {
         posts: [], 
         postSelectedId: null,
         error: false
-    } 
+    }  
 
     render () { 
 
@@ -19,13 +22,20 @@ class Blog extends Component {
                 <header>
                     <nav>
                         <ul>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/new-post">New Post</a></li>
+                            <li><Link to="/">Home</Link></li>
+                            <li><Link to={{
+                                pathname: '/new-post',
+                                search: '?search=title',
+                                hash: '#submit'
+                            }}>New Post</Link></li>
                         </ul>
                     </nav>
                 </header> 
-                <Route path='/' exact render={()=>(<h1>Home</h1>)} />
-                <Route path='/' exact component={Posts} /> 
+                <Switch> 
+                    <Route path='/' exact component={Posts} />  
+                    <Route path='/new-post'  component={NewPosts} /> 
+                    <Route path='/:postId' exact  component={FullPost} />  
+                </Switch>
             </Oux>
         );
     }

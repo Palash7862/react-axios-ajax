@@ -10,6 +10,7 @@ class Posts extends Component {
     }
 
     componentDidMount(){
+        console.log(this.props);
         // Make a request for a user with a given ID
         axios.get('/posts')
         .then(response=>{
@@ -19,17 +20,18 @@ class Posts extends Component {
             });
             this.setState({posts: updatedPost});
             // handle success
-            console.log(updatedPost);
+            //console.log(updatedPost);
         })
         .catch(error=> {
             // handle error
-             console.log(error);
+            //console.log(error);
             this.setState({error: true});
         });
     }
 
     postSelectedHandaler = (id) =>{
-        this.setState({postSelectedId: id});
+        this.props.history.push({pathname:'/'+id});
+        //this.setState({postSelectedId: id});
     }
 
     render(){
@@ -37,9 +39,10 @@ class Posts extends Component {
         if(!this.state.error){
             posts = this.state.posts.map(post=>{ 
                 return <Post key={post.id} 
+                            id={post.id} 
                             title={post.title} 
                             author={[post.author]} 
-                            clicked={()=>this.postSelectedHandaler(post.id)}/>
+                            clicked={()=>this.postSelectedHandaler(post.id)}/> 
             });
         }
         return (
